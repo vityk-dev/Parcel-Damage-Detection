@@ -102,13 +102,20 @@ This work contributes to logistics automation by:
 parcel-damage-detection/
 ├── README.md
 ├── pyproject.toml
-├── paper/
-│   └── ieee_paper.pdf
+├── requirements.txt
+├── LICENSE
+├── .gitignore
+├── IEEE Article/
+│   └── YOLO_FEDCIS_2025___iDS.pdf/ 
 ├── results/
-│   ├── best0_metrics.json
-│   ├── best1_metrics.json
-│   └── confusion_matrices.png
-└── dashboard/
+│   ├── figures/
+│   │   ├── model_after_finetuning/
+│   │   ├── model_before_finetuning/
+│   │   └── models_comparison/
+│   └── metrics/
+│       ├── best0_results.json
+│       └── best1_results.json
+└── dashboard_demo/
     └── screenshots/
 ```
 
