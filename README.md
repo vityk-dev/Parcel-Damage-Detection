@@ -108,7 +108,7 @@ parcel-damage-detection/
 │   ├── best0_metrics.json
 │   ├── best1_metrics.json
 │   └── confusion_matrices.png
-└── dashboard_demo/
+└── dashboard/
     └── screenshots/
 ```
 
