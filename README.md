@@ -115,7 +115,7 @@ parcel-damage-detection/
 │   └── metrics/
 │       ├── best0_results.json
 │       └── best1_results.json
-└── dashboard_demo/
+└── dashboard/
     └── screenshots/
 ```
 
