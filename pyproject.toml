@@ -1,1 +1,287 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
+[project]
+name = "parcel-damage-detection"
+version = "1.0.0"
+description = "Automated parcel damage detection system using YOLOv11 classification"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Wiktor Goszczyński", email = "wiktorg@student.agh.edu.pl"},
+]
+
+keywords = [
+    "computer-vision",
+    "yolo",
+    "classification",
+    "damage-detection",
+    "logistics",
+    "deep-learning",
+    "pytorch",
+    "parcel-inspection"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "ultralytics==8.3.139",
+    "torch==2.7.0",
+    "torchvision==0.22.0",
+    "opencv-python==4.11.0.86",
+    "Pillow==11.2.1",
+    
+    # Model Export and Optimization
+    "coremltools==8.3.0",
+    "onnx==1.17.0",
+    "onnxruntime==1.19.2",
+    
+    # Data Processing and Analysis
+    "numpy==2.0.2",
+    "matplotlib==3.9.4",
+    "tqdm==4.67.1",
+    "PyYAML==6.0.2",
+    
+    # Dataset Management
+    "fiftyone==1.5.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    # Development and Testing
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.5.0",
+    "pre-commit>=3.3.0",
+]
+gpu = [
+    # GPU acceleration (CUDA)
+    "torch>=2.0.0+cu118",
+    "torchvision>=0.15.0+cu118",
+]
+deployment = [
+    # Production deployment
+    "gunicorn>=21.0.0",
+    "docker>=6.1.0",
+    "uvicorn>=0.23.0",
+]
+research = [
+    # Research and experimentation
+    "jupyter>=1.0.0",
+    "jupyterlab>=4.0.0",
+    "tensorboard>=2.13.0",
+    "wandb>=0.15.0",
+    "mlflow>=2.5.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/vityk-dev/Parcel-Damage-Detection"
+Repository = "https://github.com/vityk-dev/Parcel-Damage-Detection"
+Documentation = "https://github.com/vityk-dev/Parcel-Damage-Detection/wiki"
+"Bug Reports" = "https://github.com/vityk-dev/Parcel-Damage-Detection/issues"
+
+
+[project.scripts]
+parcel-dashboard = "parcel_damage_detection.dashboard:main"
+parcel-evaluate = "parcel_damage_detection.evaluate:main"
+parcel-predict = "parcel_damage_detection.predict:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"parcel_damage_detection" = ["configs/*.yaml", "assets/*"]
+
+# Black code formatting
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+# isort import sorting
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["parcel_damage_detection"]
+
+# Flake8 linting (in setup.cfg or .flake8)
+[tool.flake8]
+max-line-length = 88
+extend-ignore = "E203, W503"
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".eggs",
+    "*.egg-info",
+    ".venv",
+    ".tox"
+]
+
+# MyPy type checking
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[[tool.mypy.overrides]]
+module = [
+    "dash.*",
+    "plotly.*",
+    "cv2.*",
+    "ultralytics.*",
+]
+ignore_missing_imports = true
+
+# Pytest configuration
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--cov=parcel_damage_detection",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+]
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "gpu: marks tests that require GPU",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src/parcel_damage_detection"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "setup.py",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+# Ruff linting (alternative to flake8)
+[tool.ruff]
+target-version = "py38"
+line-length = 88
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+
+# Documentation with Sphinx (if you plan to add it)
+[tool.sphinx]
+source-dir = "docs/source"
+build-dir = "docs/build"
+
+# Environment and dependency management
+[tool.pip-tools]
+generate-hashes = true
+upgrade = true
+
+# Docker and containerization metadata
+[tool.docker]
+base-image = "python:3.10-slim"
+requirements-file = "requirements.txt"
+port = 8050
+
+# Research experiment tracking
+[tool.experiment]
+tracking-uri = "mlruns/"
+experiment-name = "parcel-damage-detection"
+model-registry = "models/"
+
+# Dataset and model versioning
+[tool.dvc]
+remote = "origin"
+cache-dir = ".dvc/cache"
+state-dir = ".dvc/state"
+
+# Configuration for model evaluation
+[tool.evaluation]
+dataset-path = "data/dataset/"
+results-path = "results/"
+metrics = ["accuracy", "precision", "recall", "f1", "roc_auc"]
+visualizations = ["confusion_matrix", "roc_curve", "precision_recall_curve"]
+
+# Dashboard configuration
+[tool.dashboard]
+host = "0.0.0.0"
+port = 8050
+debug = false
+models-dir = "models/"
+upload-dir = "uploads/"
+max-file-size = "10MB"
