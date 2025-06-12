@@ -1,6 +1,6 @@
 # Automatic Parcel Damage Recognition Module for an Inspection Robot
 
-[![IEEE Conference](https://img.shields.io/badge/IEEE-Conference%20Paper-blue.svg)](link-to-your-paper)
+[![IEEE Conference](https://img.shields.io/badge/IEEE-Conference%20Paper-blue.svg)](https://github.com/vityk-dev/Parcel-Damage-Detection/blob/main/IEEE%20Article/YOLO_FEDCIS_2025___iDS.pdf)
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![YOLOv11](https://img.shields.io/badge/YOLOv11-Classification-green.svg)](https://github.com/ultralytics/ultralytics)
 
