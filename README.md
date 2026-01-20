@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![YOLOv11](https://img.shields.io/badge/YOLOv11-Classification-green.svg)](https://github.com/ultralytics/ultralytics)
 
-**Authors:** Wiktor Goszczynski, Szymon Wałęga.
+**Author:** Wiktor Goszczynski
 **Institution:** AGH University of Krakow, Department of Automatic Control and Robotics
 
 ## 📋 Abstract
