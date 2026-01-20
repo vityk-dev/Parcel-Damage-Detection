@@ -116,21 +116,15 @@ This work contributes to logistics automation by:
 parcel-damage-detection/
 ├── README.md
 ├── pyproject.toml
-├── requirements.txt
-├── LICENSE
-├── .gitignore
-├── IEEE Article/
-│   └── YOLO_FEDCIS_2025___iDS.pdf/ 
+├── Dockerfile
+├── docker-compose.yml
+├── runtime.txt
+├── models/
 ├── results/
-│   ├── figures/
-│   │   ├── model_after_finetuning/
-│   │   ├── model_before_finetuning/
-│   │   └── models_comparison/
-│   └── metrics/
-│       ├── best0_results.json
-│       └── best1_results.json
-└── dashboard/
-    └── screenshots/
+├── runs/
+├── src/
+├── test/
+└── yolo-project/
 ```
 
 ---
@@ -147,7 +141,17 @@ parcel-damage-detection/
 
 ## 📋 Installation & Usage
 
-### Local Run Instructions
+### Run the Dashboard (Live Demo)
+
+If you just want to test the system, use the hosted dashboard:
+
+- **Dashboard:** https://parcel-damage-detection.onrender.com/
+
+---
+
+### Run Locally (Python)
+
+This project is configured via **`pyproject.toml`**.
 
 1. Clone the repository:
 
@@ -156,60 +160,93 @@ parcel-damage-detection/
     cd Parcel-Damage-Detection
     ```
 
-2. Create and activate a Python virtual environment (optional but recommended):
+2. Create and activate a virtual environment (recommended):
 
     ```bash
-    python3 -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    python3 -m venv .venv
+    source .venv/bin/activate  # Windows: .venv\Scripts\activate
     ```
 
-3. Install dependencies:
+3. Install the project using the `pyproject.toml` configuration:
 
     ```bash
-    pip install -r requirements.txt
+    pip install -U pip
+    pip install .
     ```
 
-4. Run the dashboard locally:
+    If you want an editable (dev) install:
 
     ```bash
-    python dashboard/app.py
+    pip install -e .
     ```
 
-5. Open your browser and navigate to `http://127.0.0.1:8050`
+4. Run the dashboard locally (depending on where your Dash entry file lives):
+
+    **Option A (module):**
+
+    ```bash
+    python -m src.dashboard.app
+    ```
+
+    **Option B (file path):**
+
+    ```bash
+    python src/dashboard/app.py
+    ```
+
+5. Open your browser:
+
+- `http://127.0.0.1:8050` (or `http://localhost:8050`)
+
+> Note: If your dashboard entry file is located elsewhere in `src/`, run it accordingly (e.g., `python -m src.app`).
 
 ---
 
-### Docker Build & Run Instructions
+### Run with Docker
 
-1. Build the Docker image:
+#### Build & Run (Docker)
 
-    ```bash
-    docker build -t parcel-damage-dashboard .
-    ```
+1. Build the image:
+
+```bash
+docker build -t parcel-damage-detection .
+```
 
 2. Run the container:
 
-    ```bash
-    docker run -d -p 8050:8050 --name parcel_dashboard parcel-damage-dashboard
-    ```
+```bash
+docker run --rm -p 8050:8050 --name parcel_damage_dashboard parcel-damage-detection
+```
 
-3. Access the dashboard at `http://localhost:8050`
+3. Open:
 
-4. To stop and remove the container:
+- `http://localhost:8050`
 
-    ```bash
-    docker stop parcel_dashboard
-    docker rm parcel_dashboard
-    ```
+#### Run with Docker Compose
+
+If you prefer Compose (recommended for consistency):
+
+```bash
+docker compose up --build
+```
+
+Then open:
+
+- `http://localhost:8050`
+
+Stop with **Ctrl+C**, then clean up:
+
+```bash
+docker compose down
+```
 
 ---
 
-### Usage Instructions for Uploading Multiple Images per Parcel
+### Testing Tips (Multiple Images per Parcel)
 
-- The dashboard supports uploading multiple images for a single parcel to improve classification accuracy.
-- When testing, drag and drop or select multiple images simultaneously.
-- The system aggregates the predictions across images and provides a combined damage classification result.
-- This approach helps to capture different angles and lighting conditions for robust detection.
+- The dashboard supports uploading **multiple images for a single parcel** to improve robustness.
+- When testing, drag & drop (or select) multiple images at once.
+- The system aggregates predictions across images and returns a combined decision.
 
 ---
 
