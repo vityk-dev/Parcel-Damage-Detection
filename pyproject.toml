@@ -10,7 +10,7 @@ include = ["src*"]
 name = "parcel-damage-detection"
 version = "0.1.0"
 description = "Parcel damage detection with YOLO, ONNX and Dash dashboard"
-requires-python = ">=3.9"
+requires-python = ">=3.10,<3.13"
 
 dependencies = [
     "ultralytics==8.3.139",
