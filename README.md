@@ -119,12 +119,28 @@ parcel-damage-detection/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── runtime.txt
+├── IEEE Article/
+│   └── YOLO_FEDCIS_2025___iDS.pdf
 ├── models/
+│   ├── best0.pt
+│   ├── best1.pt
+│   ├── best0.onnx
+│   ├── best1.onnx
+│   └── best1.mlpackage/
 ├── results/
-├── runs/
+│   ├── yolo_training_process_static.png
+│   └── yolo_training_process_interactive.html
 ├── src/
-├── test/
-└── yolo-project/
+│   ├── __init__.py
+│   ├── dashboard.py
+│   ├── inference.py
+│   ├── train.py
+│   ├── dataset.py
+│   ├── export.py
+│   ├── convert.py
+│   ├── evalu1.py
+│   └── visualize_training.py
+└── test/
 ```
 
 ---
@@ -170,28 +186,13 @@ This project is configured via **`pyproject.toml`**.
 3. Install the project using the `pyproject.toml` configuration:
 
     ```bash
-    pip install -U pip
-    pip install .
-    ```
-
-    If you want an editable (dev) install:
-
-    ```bash
     pip install -e .
     ```
 
-4. Run the dashboard locally (depending on where your Dash entry file lives):
-
-    **Option A (module):**
+4. Run the dashboard locally:
 
     ```bash
-    python -m src.dashboard.app
-    ```
-
-    **Option B (file path):**
-
-    ```bash
-    python src/dashboard/app.py
+    python src/dashboard.py
     ```
 
 5. Open your browser:
@@ -200,11 +201,20 @@ This project is configured via **`pyproject.toml`**.
 
 > Note: If your dashboard entry file is located elsewhere in `src/`, run it accordingly (e.g., `python -m src.app`).
 
+
+
+6. Run inference on new images using the trained models:
+
+    ```bash
+    python src/inference.py
+    ```
 ---
 
 ### Run with Docker
 
 #### Build & Run (Docker)
+
+The Docker container runs the production web server via Gunicorn using `src.inference:server`.
 
 1. Build the image:
 
@@ -215,7 +225,7 @@ docker build -t parcel-damage-detection .
 2. Run the container:
 
 ```bash
-docker run --rm -p 8050:8050 --name parcel_damage_dashboard parcel-damage-detection
+docker run --rm -p 8050:8050 parcel-damage-detection
 ```
 
 3. Open:
