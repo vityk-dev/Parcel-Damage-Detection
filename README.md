@@ -5,6 +5,7 @@
 [![YOLOv11](https://img.shields.io/badge/YOLOv11-Classification-green.svg)](https://github.com/ultralytics/ultralytics)
 
 **Author:** Wiktor Goszczynski
+**Author of dataswt:** Szymon Wałęga 
 **Institution:** AGH University of Krakow, Department of Automatic Control and Robotics
 
 ## 📋 Abstract
