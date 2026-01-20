@@ -7,7 +7,6 @@ pillow==11.2.1
 coremltools==8.3.0
 
 onnx==1.17.0
-onnxruntime==1.19.2
 
 matplotlib==3.9.4
 fiftyone==1.5.2

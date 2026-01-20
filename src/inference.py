@@ -1,9 +1,21 @@
+# WSGI entrypoint for hosting the Dash app (e.g., `gunicorn src.inference:server`)
+# This is safe: it only creates `server` if the dashboard can be imported.
+try:
+    from .dashboard import app as dash_app
+    server = dash_app.server
+except Exception as e:
+    server = None
+    print(f"Warning: could not initialize Dash server: {e}")
+
 # src/inference.py
 import os
 import time
 import cv2
 import numpy as np
-import coremltools as ct
+try:
+    import coremltools as ct
+except ModuleNotFoundError:
+    ct = None
 from PIL import Image
 from datetime import datetime
 import sys
@@ -11,6 +23,12 @@ import sys
 class CoreMLClassifier:
     def __init__(self, model_path, confidence_threshold=0.5, camera_index=0):
         """Initialize the classifier using CoreML for Mac."""
+        
+        if ct is None:
+            raise RuntimeError(
+                "coremltools is not available on this platform. "
+                "Run this script on macOS or use the ONNX dashboard/inference path."
+            )
         
         self.model_path = os.path.abspath(model_path)
         print(f"Loading CoreML model from {self.model_path}...")

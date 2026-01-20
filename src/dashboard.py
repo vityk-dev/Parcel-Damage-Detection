@@ -16,6 +16,8 @@ from sklearn.metrics import confusion_matrix, roc_curve, auc, precision_recall_c
 from datetime import datetime
 import json
 import uuid
+import tempfile
+from typing import Optional
 
 
 MODEL_DIR = 'models/'
@@ -24,7 +26,12 @@ RESULTS_DIR = 'results/'
 
 
 for folder in [MODEL_DIR, DATASET_DIR, RESULTS_DIR]:
-    os.makedirs(folder, exist_ok=True)
+    try:
+        os.makedirs(folder, exist_ok=True)
+    except OSError as e:
+        # In some hosting environments the filesystem may be read-only.
+        # The app can still run as long as models are accessible and we use temp dirs for uploads.
+        print(f"Warning: could not create folder '{folder}': {e}")
 
 
 INITIAL_METRICS = {
@@ -131,7 +138,8 @@ def parse_image(contents):
     decoded = base64.b64decode(content_string)
     try:
         img = Image.open(io.BytesIO(decoded))
-        temp_path = os.path.join(RESULTS_DIR, f"temp_{uuid.uuid4()}.jpg")
+        tmp_dir = os.environ.get("TMPDIR") or tempfile.gettempdir()
+        temp_path = os.path.join(tmp_dir, f"temp_{uuid.uuid4()}.jpg")
         img.save(temp_path)
         return temp_path
     except Exception as e:
@@ -863,5 +871,16 @@ def update_output(contents, filename):
     
     return [image_div], [current_result], [previous_result]
 
+
+def run_dashboard(debug: bool = False, host: str = "0.0.0.0", port: Optional[int] = None):
+    """Run the Dash server.
+
+    This wrapper exists so `src.run_dashboard()` works and so hosting platforms can
+    control port via the PORT environment variable.
+    """
+    if port is None:
+        port = int(os.environ.get("PORT", "8050"))
+    app.run_server(debug=debug, host=host, port=port)
+
 if __name__ == '__main__':
-    app.run_server(debug=True, host='0.0.0.0') 
+    run_dashboard(debug=True)

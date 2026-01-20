@@ -1,8 +1,18 @@
-# .gitignore
-yolo-project/
+# Python
 __pycache__/
-.DS_Store
-data/
-*.log
+*.pyc
+
+# venv
+.venv/
+yolo-project/
+
+# ML artifacts
 runs/
-.ipynb_checkpoints/
+results/
+data/
+models/*.onnx
+
+# OS / IDE
+.DS_Store
+.vscode/
+.DS_Store

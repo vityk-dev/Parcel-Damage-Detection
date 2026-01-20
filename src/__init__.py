@@ -1,10 +1,4 @@
 # src/__init__.py
-"""Top-level package exports.
-
-IMPORTANT:
-- Do not perform heavy work (e.g., training) at import time.
-- We therefore expose *lazy* wrappers that import underlying modules only when called.
-"""
 
 from __future__ import annotations
 
@@ -49,6 +43,6 @@ __all__ = [
     "run_dataset_manager", 
     "run_export_pipeline", 
     "run_inference_pipeline",
-    "run_dashboard",  # Added this
+    "run_dashboard",  
     "run_yolo_training_visualization",
 ]
