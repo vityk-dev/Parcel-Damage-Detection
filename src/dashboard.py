@@ -1,6 +1,6 @@
 # src/dashboard.py
 import dash
-from dash import dcc, html, Input, Output, State, callback, ctx
+from dash import dcc, html, Input, Output, State, callback, ctx, dash_table
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import plotly.graph_objects as go
@@ -518,7 +518,7 @@ app.layout = dbc.Container([
                         id='upload-image',
                         children=html.Div([
                             'Drag and Drop or ',
-                            html.A('Select an Image')
+                            html.A('Select Image(s)')
                         ]),
                         style={
                             'width': '100%',
@@ -530,7 +530,7 @@ app.layout = dbc.Container([
                             'textAlign': 'center',
                             'margin': '10px'
                         },
-                        multiple=False
+                        multiple=True
                     ),
                     html.Div(id='output-image-upload', className="mt-3"),
                     dbc.Row([
@@ -824,52 +824,124 @@ def update_comparison_metrics(selected_model, metrics_calculated):
 def update_output(contents, filename):
     if contents is None:
         return [html.Div("No image uploaded")], [], []
-    
-    
-    img_path = parse_image(contents)
-    if img_path is None:
-        return [html.Div("Error processing the uploaded image")], [], []
-    
-    
-    image_div = html.Div([
-        html.H5(filename),
-        html.Img(src=contents, style={'maxWidth': '100%', 'maxHeight': '300px'}),
-    ])
-    
-    
+
+    # Normalize to lists for multi-upload
+    contents_list = contents if isinstance(contents, list) else [contents]
+    filename_list = filename if isinstance(filename, list) else [filename]
+
+    # Load models once per batch
     current_model = load_model(os.path.join(MODEL_DIR, "best1.onnx"))
     previous_model = load_model(os.path.join(MODEL_DIR, "best0.onnx"))
-    
-    
-    current_class, current_conf = predict(current_model, img_path)
-    previous_class, previous_conf = predict(previous_model, img_path)
-    
-    
-    try:
-        os.remove(img_path)
-    except:
-        pass
-    
-    
-    current_result = dbc.Card([
-        dbc.CardHeader("Current Model (best1.onnx) Prediction"),
+
+    if current_model is None or previous_model is None:
+        return [html.Div("Error: Unable to load one or more ONNX models.")], [], []
+
+    rows_best1 = []
+    rows_best0 = []
+    preview_children = []
+
+    for c, fn in zip(contents_list, filename_list):
+        img_path = parse_image(c)
+        if img_path is None:
+            continue
+
+        # Preview card
+        preview_children.append(
+            dbc.Card(
+                dbc.CardBody([
+                    html.H6(fn, className="mb-2"),
+                    html.Img(src=c, style={'maxWidth': '100%', 'maxHeight': '220px'})
+                ]),
+                className="shadow-sm mb-3"
+            )
+        )
+
+        # Predictions
+        current_class, current_conf = predict(current_model, img_path)
+        previous_class, previous_conf = predict(previous_model, img_path)
+
+        # Cleanup temp file
+        try:
+            os.remove(img_path)
+        except Exception:
+            pass
+
+        rows_best1.append({
+            "filename": fn,
+            "pred_class": current_class,
+            "confidence": round(float(current_conf), 4)
+        })
+        rows_best0.append({
+            "filename": fn,
+            "pred_class": previous_class,
+            "confidence": round(float(previous_conf), 4)
+        })
+
+    if not rows_best1:
+        return [html.Div("No valid images were processed.")], [], []
+
+    def _summary(rows):
+        damaged = sum(1 for r in rows if r["pred_class"] == "damaged")
+        undamaged = sum(1 for r in rows if r["pred_class"] == "undamaged")
+        other = len(rows) - damaged - undamaged
+        return damaged, undamaged, other
+
+    b1_dmg, b1_undmg, b1_other = _summary(rows_best1)
+    b0_dmg, b0_undmg, b0_other = _summary(rows_best0)
+
+    table_columns = [
+        {"name": "Filename", "id": "filename"},
+        {"name": "Prediction", "id": "pred_class"},
+        {"name": "Confidence", "id": "confidence"},
+    ]
+
+    best1_block = dbc.Card([
+        dbc.CardHeader("Current Model (best1.onnx) — Batch Results"),
         dbc.CardBody([
-            html.H5(current_class, className="text-primary"),
-            html.P(f"Confidence: {current_conf:.4f} ({current_conf*100:.2f}%)", className="card-text"),
-            dbc.Progress(value=int(current_conf * 100), color="success" if current_class == "damaged" else "info")
-        ])
+            html.P(f"Processed: {len(rows_best1)} images"),
+            html.Ul([
+                html.Li(f"Damaged: {b1_dmg}"),
+                html.Li(f"Undamaged: {b1_undmg}"),
+                html.Li(f"Other/Error: {b1_other}"),
+            ]),
+            dash_table.DataTable(
+                columns=table_columns,
+                data=rows_best1,
+                page_size=10,
+                style_table={'overflowX': 'auto'},
+                style_cell={'textAlign': 'left', 'padding': '6px'},
+            ),
+        ]),
     ], className="shadow-sm")
-    
-    previous_result = dbc.Card([
-        dbc.CardHeader("Previous Model (best0.onnx) Prediction"),
+
+    best0_block = dbc.Card([
+        dbc.CardHeader("Previous Model (best0.onnx) — Batch Results"),
         dbc.CardBody([
-            html.H5(previous_class, className="text-secondary"),
-            html.P(f"Confidence: {previous_conf:.4f} ({previous_conf*100:.2f}%)", className="card-text"),
-            dbc.Progress(value=int(previous_conf * 100), color="success" if previous_class == "damaged" else "info")
-        ])
+            html.P(f"Processed: {len(rows_best0)} images"),
+            html.Ul([
+                html.Li(f"Damaged: {b0_dmg}"),
+                html.Li(f"Undamaged: {b0_undmg}"),
+                html.Li(f"Other/Error: {b0_other}"),
+            ]),
+            dash_table.DataTable(
+                columns=table_columns,
+                data=rows_best0,
+                page_size=10,
+                style_table={'overflowX': 'auto'},
+                style_cell={'textAlign': 'left', 'padding': '6px'},
+            ),
+        ]),
     ], className="shadow-sm")
-    
-    return [image_div], [current_result], [previous_result]
+
+    previews_container = html.Div(
+        preview_children,
+        style={
+            'maxHeight': '520px',
+            'overflowY': 'auto',
+        },
+    )
+
+    return [previews_container], [best1_block], [best0_block]
 
 
 def run_dashboard(debug: bool = False, host: str = "0.0.0.0", port: Optional[int] = None):
