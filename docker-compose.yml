@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./results:/app/results
+    command: python src/train.py  

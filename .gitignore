@@ -1,0 +1,8 @@
+# .gitignore
+yolo-project/
+__pycache__/
+.DS_Store
+data/
+*.log
+runs/
+.ipynb_checkpoints/
