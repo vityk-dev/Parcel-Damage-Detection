@@ -1,3 +1,4 @@
+results/*.html linguist-vendored
 results/*.png linguist-vendored
 models/*.onnx linguist-vendored
 models/*.pt linguist-vendored
