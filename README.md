@@ -13,7 +13,7 @@
 ## 🚀 Live Demo (Dashboard)
 
 Try the interactive web dashboard for real-time parcel damage classification here:  
-[https://parcel-damage-detection.onrender.com/](https://parcel-damage-detection.onrender.com/)
+[https://parcel-damage-detection.huggingface.co/](https://huggingface.co/spaces/wiktorgit/dashboard)
 
 ---
 
