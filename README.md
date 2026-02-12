@@ -1,8 +1,4 @@
-Automatic Parcel Damage Recognition Module for an Inspection Robot
-
-Author: Wiktor Goszczynski
-Author of dataset: Szymon Wałęga
-Institution: AGH University of Krakow, Department of Automatic Control and Robotics
+End-to-end computer vision system for real-time parcel damage classification, designed for an autonomous warehouse inspection robot and digital twin environment.
 
 ⸻
 
@@ -14,8 +10,6 @@ https://huggingface.co/spaces/wiktorgit/dashboard
 ⸻
 
 📋 Overview
-
-This repository presents an end-to-end computer vision system for automatic parcel damage recognition, developed as part of a digital twin warehouse inspection robot.
 
 The project covers:
 	•	Dataset engineering
