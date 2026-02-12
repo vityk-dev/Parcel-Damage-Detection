@@ -1,287 +1,207 @@
-# Automatic Parcel Damage Recognition Module for an Inspection Robot
+Automatic Parcel Damage Recognition Module for an Inspection Robot
 
-[![IEEE Conference](https://img.shields.io/badge/IEEE-Conference%20Paper-blue.svg)](https://github.com/vityk-dev/Parcel-Damage-Detection/blob/main/IEEE%20Article/YOLO_FEDCIS_2025___iDS.pdf)  
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)  
-[![YOLOv11](https://img.shields.io/badge/YOLOv11-Classification-green.svg)](https://github.com/ultralytics/ultralytics)
+Author: Wiktor Goszczynski
+Author of dataset: Szymon Wałęga
+Institution: AGH University of Krakow, Department of Automatic Control and Robotics
 
-**Author:** Wiktor Goszczynski  
-**Author of dataset:** Szymon Wałęga  
-**Institution:** AGH University of Krakow, Department of Automatic Control and Robotics
+⸻
 
----
+🚀 Live Demo
 
-## 🚀 Live Demo (Dashboard)
+Interactive dashboard:
+https://huggingface.co/spaces/wiktorgit/dashboard
 
-Try the interactive web dashboard for real-time parcel damage classification here:  
-[https://parcel-damage-detection.huggingface.co/](https://huggingface.co/spaces/wiktorgit/dashboard)
+⸻
 
----
+📋 Overview
 
-## 📋 Abstract
+This repository presents an end-to-end computer vision system for automatic parcel damage recognition, developed as part of a digital twin warehouse inspection robot.
 
-This repository presents our work on expanding machine learning hardware and algorithm solutions for a damage detection inspection robot as part of creating a digital twin warehouse system. We developed a comprehensive dataset of over 6,800 images and applied tailored data augmentation to capture operational environment variability. Our YOLOv11n-cls-based model achieves **98.50% accuracy**, **97.04% precision**, and **99.74% recall** on validation data, with inference speeds exceeding **251 FPS** on Apple M1 hardware via CoreML optimization.
+The project covers:
+	•	Dataset engineering
+	•	Model training and evaluation
+	•	Experiment tracking with MLflow
+	•	Inference optimization (ONNX, CoreML)
+	•	Edge deployment (NVIDIA Jetson Nano)
+	•	Docker-based production setup
 
----
+The YOLOv11n-cls model achieves:
+	•	98.50% accuracy
+	•	97.04% precision
+	•	99.74% recall
 
-## 🎯 Key Achievements
+Inference speed reaches 251+ FPS after optimization.
 
-- **High Performance**: 98.50% accuracy with 99.74% recall (critical for minimizing missed damage)  
-- **Real-time Processing**: 251+ FPS inference speed on optimized hardware  
-- **Comprehensive Dataset**: 6,800+ images with domain-specific augmentation  
-- **Production Ready**: CoreML optimization for deployment  
-- **Interactive Dashboard**: Real-time model comparison and testing interface  
+⸻
 
----
+🎯 Key Highlights
+	•	End-to-end ML pipeline (data → training → deployment)
+	•	MLflow-based experiment tracking and reproducibility
+	•	ONNX and CoreML inference optimization
+	•	Deployment-ready Docker setup with Gunicorn
+	•	Designed for Kubernetes-based scaling
+	•	Validated on edge device (Jetson Nano)
 
-## 📊 Model Performance
+⸻
 
-### Final Results (best1 model)
+📊 Model Performance
 
-| Metric     | Score   | Improvement over best0 |
-|------------|---------|-----------------------|
-| **Accuracy**  | 98.50%  | +1.50pp               |
-| **Precision** | 97.04%  | +2.24pp               |
-| **Recall**    | 99.74%  | +0.93pp               |
-| **F1-Score**  | 98.37%  | +1.61pp               |
+Final Results (best1)
 
-### Real-world Conditions Testing
+Metric	Score
+Accuracy	98.50%
+Precision	97.04%
+Recall	99.74%
+F1-Score	98.37%
 
-Tested under challenging lighting conditions (darker/lighter environments):
+Real-world Lighting Test
 
-- **Accuracy**: 94.44%  
-- **Precision**: 91.14%  
-- **Recall**: 100%  
-- **F1-Score**: 95.36%  
+Metric	Score
+Accuracy	94.44%
+Precision	91.14%
+Recall	100%
+F1-Score	95.36%
 
----
 
-## 🏗️ System Architecture
+⸻
 
-### 1. Custom Inspection Robot
+🏗️ System Architecture
 
-- **Omnidirectional drive** with mecanum wheels  
-- **NVIDIA Jetson Nano** for ML processing  
-- **RGB Camera** with servo mount for 360° coverage  
-- **LiDAR** for spatial awareness  
-- **Arduino** for motor control and sensor integration  
+Inspection Robot
+	•	Omnidirectional drive (mecanum wheels)
+	•	NVIDIA Jetson Nano
+	•	RGB camera (servo-mounted)
+	•	LiDAR
+	•	Arduino for motor control
 
-### 2. Computer Vision Pipeline
+⸻
 
-- **YOLOv11n-cls** classification model  
-- **640×640 pixel** input resolution  
-- **Domain-specific augmentation** using Albumentations  
-- **Iterative improvement** process (best0 → best1)  
+Computer Vision Pipeline
+	•	YOLOv11n-cls (PyTorch)
+	•	640×640 resolution
+	•	Domain-specific augmentation (Albumentations)
+	•	Iterative training workflow
+	•	Clear separation between training and inference
 
-### 3. Optimization Stack
+⸻
 
-- **PyTorch** → **ONNX** → **CoreML** conversion pipeline  
-- **Apple Neural Engine** optimization  
-- **30 FPS** (PyTorch) → **251+ FPS** (CoreML)  
+Optimization & Deployment
 
----
+Training and deployment pipeline:
+	1.	Train model in PyTorch
+	2.	Track experiments with MLflow
+	3.	Export to ONNX
+	4.	Optimize inference via ONNX Runtime
+	5.	Convert to CoreML (Apple Neural Engine)
+	6.	Deploy on Jetson Nano
 
-## 📈 Dataset Details
+Backend:
+	•	FastAPI-compatible inference server
+	•	Gunicorn production server
+	•	Dockerized environment
+	•	Structured for Kubernetes deployment
 
-- **Total Images**: 6,800+  
-- **Training Set**: 4,972 images (2,372 damaged + 2,600 undamaged)  
-- **Validation Set**: 1,903 images (903 damaged + 1,000 undamaged)  
-- **Augmentation**: 10x per original image with realistic transformations  
-- **Sources**: Kaggle dataset + custom real-world captures  
+⸻
 
-### Augmentation Strategy
+🔁 ML Lifecycle
 
-- Conservative spatial transforms (±10° rotation, 0.95-1.05 scale)  
-- Warehouse lighting simulation (±10% brightness/contrast)  
-- Realistic shadow effects (20% probability)  
-- Horizontal flips and minor translations  
+This project follows a simple but production-oriented ML lifecycle:
+	•	MLflow for experiment tracking
+	•	Reproducible training configuration
+	•	Clear separation between training, evaluation, and inference
+	•	Containerized deployment
+	•	Prepared for CI/CD and scalable orchestration
 
----
+⸻
 
-## 🔬 Research Contribution
+📈 Dataset
+	•	6,800+ images
+	•	Balanced damaged / undamaged samples
+	•	10× augmentation per image
+	•	Combination of Kaggle and custom warehouse data
 
-This work contributes to logistics automation by:
+Augmentation includes:
+	•	Small spatial transforms
+	•	Lighting simulation
+	•	Shadow effects
+	•	Minor translations and flips
 
-- Demonstrating practical deep learning implementation for quality control  
-- Achieving production-ready performance with real-time constraints  
-- Providing comprehensive evaluation methodology  
-- Enabling integration into existing warehouse workflows  
+The goal was realistic operational variability.
 
-**IEEE Conference Paper**: *"Automatic Parcel Damage Recognition Module for an Inspection Robot"*
+⸻
 
----
+🛠️ Tech Stack
 
-## 📁 Repository Structure
+ML
+	•	PyTorch
+	•	YOLOv11
+	•	MLflow
+	•	ONNX Runtime
+	•	CoreML
 
-```
-parcel-damage-detection/
-├── README.md
-├── pyproject.toml
-├── Dockerfile
-├── docker-compose.yml
-├── runtime.txt
-├── IEEE Article/
-│   └── YOLO_FEDCIS_2025___iDS.pdf
-├── models/
-│   ├── best0.pt
-│   ├── best1.pt
-│   ├── best0.onnx
-│   ├── best1.onnx
-│   └── best1.mlpackage/
-├── results/
-│   ├── yolo_training_process_static.png
-│   └── yolo_training_process_interactive.html
-├── src/
-│   ├── __init__.py
-│   ├── dashboard.py
-│   ├── inference.py
-│   ├── train.py
-│   ├── dataset.py
-│   ├── export.py
-│   ├── convert.py
-│   ├── evalu1.py
-│   └── visualize_training.py
-└── test/
-```
+Data
+	•	Albumentations
+	•	FiftyOne
+	•	NumPy
+	•	Pandas
 
----
+Backend & Deployment
+	•	FastAPI
+	•	Dash (Plotly)
+	•	Gunicorn
+	•	Docker
+	•	Kubernetes-ready structure
 
-## 🛠️ Technical Stack
+Hardware
+	•	NVIDIA Jetson Nano
+	•	Apple M1
 
-- **Deep Learning**: YOLOv11 (Ultralytics), PyTorch  
-- **Optimization**: ONNX, CoreML, Apple Neural Engine  
-- **Data Processing**: Albumentations, FiftyOne, NumPy, Pandas  
-- **Visualization**: Dash, Plotly, Bootstrap  
-- **Hardware**: NVIDIA Jetson Nano, Apple M1 (inference testing)  
+⸻
 
----
+📦 Run Locally
 
-## 📋 Installation & Usage
+git clone https://github.com/vityk-dev/Parcel-Damage-Detection.git
+cd Parcel-Damage-Detection
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+python src/dashboard.py
 
-### Run the Dashboard (Live Demo)
+Open:
+http://localhost:8050
 
-If you just want to test the system, use the hosted dashboard:
+⸻
 
-- **Dashboard:** https://parcel-damage-detection.onrender.com/
+🐳 Run with Docker
 
----
-
-### Run Locally (Python)
-
-This project is configured via **`pyproject.toml`**.
-
-1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/vityk-dev/Parcel-Damage-Detection.git
-    cd Parcel-Damage-Detection
-    ```
-
-2. Create and activate a virtual environment (recommended):
-
-    ```bash
-    python3 -m venv .venv
-    source .venv/bin/activate  # Windows: .venv\Scripts\activate
-    ```
-
-3. Install the project using the `pyproject.toml` configuration:
-
-    ```bash
-    pip install -e .
-    ```
-
-4. Run the dashboard locally:
-
-    ```bash
-    python src/dashboard.py
-    ```
-
-5. Open your browser:
-
-- `http://127.0.0.1:8050` (or `http://localhost:8050`)
-
-> Note: If your dashboard entry file is located elsewhere in `src/`, run it accordingly (e.g., `python -m src.app`).
-
-
-
-6. Run inference on new images using the trained models:
-
-    ```bash
-    python src/inference.py
-    ```
----
-
-### Run with Docker
-
-#### Build & Run (Docker)
-
-The Docker container runs the production web server via Gunicorn using `src.inference:server`.
-
-1. Build the image:
-
-```bash
 docker build -t parcel-damage-detection .
-```
+docker run -p 8050:8050 parcel-damage-detection
 
-2. Run the container:
+Or:
 
-```bash
-docker run --rm -p 8050:8050 parcel-damage-detection
-```
-
-3. Open:
-
-- `http://localhost:8050`
-
-#### Run with Docker Compose
-
-If you prefer Compose (recommended for consistency):
-
-```bash
 docker compose up --build
-```
 
-Then open:
 
-- `http://localhost:8050`
+⸻
 
-Stop with **Ctrl+C**, then clean up:
+🔮 Future Improvements
+	•	Damage localization
+	•	Multi-class damage detection
+	•	Automated retraining pipeline
+	•	Drift monitoring
+	•	Full Kubernetes deployment with monitoring stack
 
-```bash
-docker compose down
-```
+⸻
 
----
+📄 Paper
 
-### Testing Tips (Multiple Images per Parcel)
+IEEE Conference Paper:
+“Automatic Parcel Damage Recognition Module for an Inspection Robot”
 
-- The dashboard supports uploading **multiple images for a single parcel** to improve robustness.
-- When testing, drag & drop (or select) multiple images at once.
-- The system aggregates predictions across images and returns a combined decision.
+⸻
 
----
+📞 Contact
 
-## 🔮 Future Work
-
-- **Damage Localization**: Extend to highlight specific damaged areas  
-- **Multi-class Classification**: Distinguish damage types (tears, water, crushing)  
-- **Edge Deployment**: Further optimization for conveyor system integration  
-- **Multi-view Integration**: Combine multiple camera angles  
-- **Continuous Learning**: Operational feedback integration  
-
----
-
-## 📞 Contact
-
-- **Wiktor Goszczynski**: wiktorg@student.agh.edu.pl  
-- **Institution**: AGH University of Krakow  
-- **Department**: Automatic Control and Robotics  
-
----
-
-## 🏆 Acknowledgments
-
-This work was conducted within the Industrial Data Science (IDS) student research group at AGH University of Krakow as part of developing a digital twin warehouse system.
-
----
-
-*This repository accompanies our IEEE conference paper demonstrating practical computer vision implementation for autonomous warehouse inspection systems.*
+Wiktor Goszczynski
+wiktorg@student.agh.edu.pl
+AGH University of Krakow
