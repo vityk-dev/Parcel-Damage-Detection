@@ -12,6 +12,7 @@ https://huggingface.co/spaces/wiktorgit/dashboard
 📋 Overview
 
 The project covers:
+
 	•	Dataset engineering
 	•	Model training and evaluation
 	•	Experiment tracking with MLflow
@@ -20,6 +21,7 @@ The project covers:
 	•	Docker-based production setup
 
 The YOLOv11n-cls model achieves:
+
 	•	98.50% accuracy
 	•	97.04% precision
 	•	99.74% recall
@@ -63,6 +65,7 @@ F1-Score	95.36%
 🏗️ System Architecture
 
 Inspection Robot
+
 	•	Omnidirectional drive (mecanum wheels)
 	•	NVIDIA Jetson Nano
 	•	RGB camera (servo-mounted)
@@ -72,6 +75,7 @@ Inspection Robot
 ⸻
 
 Computer Vision Pipeline
+
 	•	YOLOv11n-cls (PyTorch)
 	•	640×640 resolution
 	•	Domain-specific augmentation (Albumentations)
@@ -83,6 +87,7 @@ Computer Vision Pipeline
 Optimization & Deployment
 
 Training and deployment pipeline:
+
 	1.	Train model in PyTorch
 	2.	Track experiments with MLflow
 	3.	Export to ONNX
@@ -91,6 +96,7 @@ Training and deployment pipeline:
 	6.	Deploy on Jetson Nano
 
 Backend:
+
 	•	FastAPI-compatible inference server
 	•	Gunicorn production server
 	•	Dockerized environment
@@ -101,6 +107,7 @@ Backend:
 🔁 ML Lifecycle
 
 This project follows a simple but production-oriented ML lifecycle:
+
 	•	MLflow for experiment tracking
 	•	Reproducible training configuration
 	•	Clear separation between training, evaluation, and inference
@@ -110,12 +117,14 @@ This project follows a simple but production-oriented ML lifecycle:
 ⸻
 
 📈 Dataset
+
 	•	6,800+ images
 	•	Balanced damaged / undamaged samples
 	•	10× augmentation per image
 	•	Combination of Kaggle and custom warehouse data
 
 Augmentation includes:
+
 	•	Small spatial transforms
 	•	Lighting simulation
 	•	Shadow effects
@@ -180,6 +189,7 @@ docker compose up --build
 ⸻
 
 🔮 Future Improvements
+
 	•	Damage localization
 	•	Multi-class damage detection
 	•	Automated retraining pipeline
