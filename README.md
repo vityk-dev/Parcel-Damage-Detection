@@ -29,6 +29,7 @@ Inference speed reaches 251+ FPS after optimization.
 ⸻
 
 🎯 Key Highlights
+
 	•	End-to-end ML pipeline (data → training → deployment)
 	•	MLflow-based experiment tracking and reproducibility
 	•	ONNX and CoreML inference optimization
