@@ -11,8 +11,23 @@ runs/
 results/
 data/
 models/*.onnx
+mlflow.db
+mlruns/
+
+# Distribution / Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testing
+.pytest_cache/
+.coverage
+
+# Jupyter Notebooks
+.ipynb_checkpoints
 
 # OS / IDE
 .DS_Store
 .vscode/
-.DS_Store
+.idea/
