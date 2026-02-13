@@ -32,7 +32,7 @@ def main():
         mlflow.log_param("git_commit", commit)
         mlflow.log_param("git_branch", branch)
         mlflow.log_param("git_dirty", dirty)
-        mlflow.log_param("epochs", 1)
+        mlflow.log_param("epochs", 76)
         mlflow.log_param("imgsz", 640)
         mlflow.log_param("dataset_path", "data")
 
